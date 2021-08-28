@@ -1,5 +1,6 @@
 package com.ovalhr.taskmanager.controller;
 
+import com.ovalhr.taskmanager.entity.Project;
 import com.ovalhr.taskmanager.entity.Task;
 import com.ovalhr.taskmanager.repositories.TaskRepository;
 import com.ovalhr.taskmanager.repositories.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -44,41 +46,13 @@ public class TaskController {
 
     @RequestMapping("/{id}")
     public ResponseEntity<Optional<Task>> edit(@PathVariable("id") Long id) {
-//        Task task = (Task) taskRepository.findById(id).get();
-//        if(task.isPresent())
-//        new ResponseEntity<>( task,  HttpStatus.OK))
-//                .orElse(new ResponseEntity<Task>(HttpStatus.NOT_FOUND));
         return new ResponseEntity<Optional<Task>>(taskRepository.findById(id), HttpStatus.OK);
-
-//       Optional<Task> task = taskRepository.findById(id);
-//       if(task.isEmpty()){
-//           return new ResponseEntity<Task>(HttpStatus.NO_CONTENT);
-//       } else {
-//           return new ResponseEntity<Task>(task.get(), HttpStatus.OK);
-//       }
     }
-//
-//    @RequestMapping("/find-all")
-//    public ResponseEntity<List<Task>> findAll(@RequestParam(value = "division", required = false) Long division) {
-//
-//        List<Task> taskList;
-//        if (Util.hasRole("ROLE_DIV_COM")) {
-//            User user = userRepository.findByUsername(Util.getCurrentUsername());
-//            division = user.getDivision().getId();
-//            taskList = (List<Task>) taskRepository.findByDivision(division);
-//        } else if (Util.hasRole("ROLE_DC")) {
-//            taskList = new ArrayList<Task>();
-//            User user = userRepository.findByUsername(Util.getCurrentUsername());
-//            taskList.add(user.getTask());
-//        } else {
-//            if (division != null) {
-//                taskList = (List<Task>) taskRepository.findByDivision(division);
-//            } else {
-//                taskList = (List<Task>) taskRepository.findAll();
-//            }
-//        }
-//
-//        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
-//    }
+
+    @RequestMapping("/find-all")
+    public ResponseEntity<List<Task>> findAll() {
+        List<Task> taskList = (List<Task>) taskRepository.findAll();
+        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
+    }
 
 }

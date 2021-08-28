@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -47,28 +47,26 @@ public class ProjectController {
     public ResponseEntity<Optional<Project>> edit(@PathVariable("id") Long id) {
         return new ResponseEntity<Optional<Project>>(projectRepository.findById(id), HttpStatus.OK);
     }
-//
-//    @RequestMapping("/find-all")
-//    public ResponseEntity<List<Project>> findAll(@RequestParam(value = "division", required = false) Long division) {
-//
-//        List<Project> projectList;
-//        if (Util.hasRole("ROLE_DIV_COM")) {
-//            User user = userRepository.findByUsername(Util.getCurrentUsername());
-//            division = user.getDivision().getId();
-//            projectList = (List<Project>) projectRepository.findByDivision(division);
-//        } else if (Util.hasRole("ROLE_DC")) {
-//            projectList = new ArrayList<Project>();
-//            User user = userRepository.findByUsername(Util.getCurrentUsername());
-//            projectList.add(user.getProject());
-//        } else {
-//            if (division != null) {
-//                projectList = (List<Project>) projectRepository.findByDivision(division);
-//            } else {
-//                projectList = (List<Project>) projectRepository.findAll();
-//            }
-//        }
-//
-//        return new ResponseEntity<List<Project>>(projectList, HttpStatus.OK);
-//    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+        try {
+            Optional<Project> project =  projectRepository.findById(id);
+            if(project.isEmpty()) {
+                return new ResponseEntity<String>("Object with given id Not Found", HttpStatus.BAD_REQUEST);
+            } else {
+                projectRepository.delete(project.get());
+            }
+            return new ResponseEntity<String>("Project With given id Deleted Successfully", HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<String>("Failed to delete", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping("/find-all")
+    public ResponseEntity<List<Project>> findAll() {
+        List<Project> projectList = (List<Project>) projectRepository.findAll();
+        return new ResponseEntity<List<Project>>(projectList, HttpStatus.OK);
+    }
 
 }

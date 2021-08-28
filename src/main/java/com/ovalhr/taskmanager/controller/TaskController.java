@@ -2,6 +2,7 @@ package com.ovalhr.taskmanager.controller;
 
 import com.ovalhr.taskmanager.entity.Project;
 import com.ovalhr.taskmanager.entity.Task;
+import com.ovalhr.taskmanager.enumeration.TaskStatus;
 import com.ovalhr.taskmanager.repositories.TaskRepository;
 import com.ovalhr.taskmanager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -51,6 +53,25 @@ public class TaskController {
 
     @RequestMapping("/find-all")
     public ResponseEntity<List<Task>> findAll() {
+        List<Task> taskList = (List<Task>) taskRepository.findAll();
+        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
+    }
+
+    @RequestMapping("/find-all/project/{projectId}")
+    public ResponseEntity<List<Task>> findAll(@PathVariable("projectId") Long projectId) {
+        List<Task> taskList = (List<Task>) taskRepository.findAll();
+        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
+    }
+
+    @RequestMapping("/find-all/expired")
+    public ResponseEntity<List<Task>> findAllExpired() {
+        List<Task> taskList = (List<Task>) taskRepository.findAll();
+        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping("/find-all/by-user/{username}")
+    public ResponseEntity<List<Task>> findAllByUser(@PathVariable("username") String username) {
         List<Task> taskList = (List<Task>) taskRepository.findAll();
         return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
     }

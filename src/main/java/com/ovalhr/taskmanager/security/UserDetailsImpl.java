@@ -39,9 +39,9 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = authorities;
     }
 
-    public static UserDetailsImpl build(User user) {
+    public static UserDetailsImpl build(User user, List<Authority> roles) {
         List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
-        for (Authority role: user.getRoles()) {
+        for (Authority role: roles) {
             authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
         }
 

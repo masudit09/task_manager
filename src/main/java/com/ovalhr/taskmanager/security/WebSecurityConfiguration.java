@@ -22,9 +22,9 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
-		// securedEnabled = true,
-		// jsr250Enabled = true,
-		prePostEnabled = true)
+		 prePostEnabled = true,
+		 securedEnabled = true,
+		 jsr250Enabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Autowired

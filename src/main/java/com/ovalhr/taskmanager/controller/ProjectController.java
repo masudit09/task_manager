@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -65,6 +66,13 @@ public class ProjectController {
 
     @RequestMapping("/find-all")
     public ResponseEntity<List<Project>> findAll() {
+        List<Project> projectList = (List<Project>) projectRepository.findAll();
+        return new ResponseEntity<List<Project>>(projectList, HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @RequestMapping("/find-all/by-user/{username}")
+    public ResponseEntity<List<Project>> findAllByUser(@PathVariable("username") String username) {
         List<Project> projectList = (List<Project>) projectRepository.findAll();
         return new ResponseEntity<List<Project>>(projectList, HttpStatus.OK);
     }

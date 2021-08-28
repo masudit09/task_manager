@@ -36,6 +36,10 @@ public class Authority implements Serializable {
 		this.username = username;
 		this.authority = authority;
 	}
+	public Authority(String username, String authority) {
+		this.username = username;
+		this.authority = authority;
+	}
 
 	public Long getId() {
 		return id;

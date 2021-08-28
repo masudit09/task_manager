@@ -1,11 +1,14 @@
 package com.ovalhr.taskmanager.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ovalhr.taskmanager.enumeration.Role;
 import com.ovalhr.taskmanager.util.Util;
 //import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,22 +46,28 @@ public class User implements Serializable {
     private String password;
 
     @Transient
+    @NotNull(message = "plainPassword is required.")
     private String plainPassword;
 
     @Column(name = "FULL_NAME", length = 100)
     private String fullName;
 
     @Column(name = "ENABLED")
+    @NotNull(message = "User should enabled of not")
     private Boolean enabled;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "username")
     private List<Authority> roles = new ArrayList<Authority>();
 
+    @JsonIgnore
     @Transient
     private Set<String> authorities = new HashSet<String>() ;
 
     @Transient
-    private String token;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "role is required.")
+    private Role role;
 
     public Long getId() {
         return id;
@@ -128,12 +137,12 @@ public class User implements Serializable {
         this.authorities = authorities;
     }
 
-    public String getToken() {
-        return token;
+    public Role getRole() {
+        return role;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     @PrePersist

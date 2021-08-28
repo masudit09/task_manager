@@ -1,6 +1,6 @@
 package com.ovalhr.taskmanager.security;
 
-import com.ovalhr.taskmanager.Util;
+import com.ovalhr.taskmanager.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

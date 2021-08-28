@@ -1,6 +1,7 @@
-package com.ovalhr.taskmanager;
+package com.ovalhr.taskmanager.util;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
 /**
  * Created by rana on 8/27/21.
  */
@@ -67,6 +70,17 @@ public class Util {
 
     public static Date getCurrentDate() {
         return Calendar.getInstance().getTime();
+    }
+
+
+    public static boolean hasRole(String role) {
+        List<GrantedAuthority> authorities = (List<GrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+        for(GrantedAuthority authority: authorities) {
+            if(authority.getAuthority().equals(role)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

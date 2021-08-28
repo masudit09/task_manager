@@ -1,8 +1,6 @@
 package com.ovalhr.taskmanager.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.ovalhr.taskmanager.Util;
-import com.ovalhr.taskmanager.enumeration.Role;
+import com.ovalhr.taskmanager.util.Util;
 //import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.StringUtils;
 

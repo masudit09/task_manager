@@ -6,7 +6,9 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-
+/**
+ * Created by rana on 8/27/21.
+ */
 public interface AuthorityRepository extends PagingAndSortingRepository<Authority, Integer> {
 
     @Query("SELECT x FROM Authority x WHERE x.username = :username AND x.authority = :authority")

@@ -32,11 +32,11 @@ This is a back-end code repository to manage project and task of that project.
  * Server: Inbuilt Tomcat
 ### SETUP INSTRUCTIONS
 
-Before running this application you should have to confirm following instruction: 
+Before running this application you should have to confirm following: 
 * JDK 11 installed.
 * maven installed.
 * mysql installed.
-  ##### Then run the following command on terminal:
+ ##### Then run the following command on terminal:
    ```
         git clone https://masudrana@bitbucket.org/masudrana/task_manager.git
         cd task_manager
@@ -51,18 +51,18 @@ Brows [http://localhost:8080/](http://localhost:8080/)
 
 ### API DETAILS
 #### USER API:
-  #####API 1:
- * End-point: /api/user/global/create
- * Method: GET
- * Accessibility: ALL 
- * Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
+#####API 1:
+* End-point: /api/user/global/create
+* Method: GET
+* Accessibility: ALL 
+* Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
 
- #####API 2:
- * end-point: /api/user/global/sign-in
- * Method: POST
- * Accessibility: ALL
- * Purpose: To sign in and get access token. you should have to keep the return token for using any end-point 
- * cURL : 
+#####API 2:
+* end-point: /api/user/global/sign-in
+* Method: POST
+* Accessibility: ALL
+* Purpose: To sign in and get access token. you should have to keep the return token for using any end-point 
+* cURL : 
    ```
         curl -X POST \
           http://localhost:8080/api/global/user/sign-in \

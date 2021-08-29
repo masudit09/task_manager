@@ -1,4 +1,4 @@
-package com.ovalhr.taskmanager.controller;
+package com.ovalhr.taskmanager.web.resource;
 
 import com.ovalhr.taskmanager.entity.Project;
 import com.ovalhr.taskmanager.repositories.ProjectRepository;

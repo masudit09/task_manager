@@ -297,8 +297,23 @@ Brows [http://localhost:8080/](http://localhost:8080/).
               -H 'content-type: application/json' \
               -H 'postman-token: 3981a85e-c102-2ed8-0b77-6ee3cb0d5a08'
         ```
- 
+  
  * API 7:
+    * end-point: /api/task/find-all/by-status/{status}
+    * Method: GET
+    * Accessibility: ADMIN,USER
+    * Purpose: To get all task by status.
+    * cURL : 
+        ```
+            curl -X GET \
+              http://localhost:8080/api/task/find-all/by-status/OPEN \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
+              -H 'content-type: application/json' \
+              -H 'postman-token: 6a39798d-9837-6797-cb8c-ba42bb92a381'
+        ```
+ 
+ * API 8:
     * end-point: /api/task/find-all/by-user/{username}
     * Method: GET
     * Accessibility: ADMIN
@@ -313,7 +328,7 @@ Brows [http://localhost:8080/](http://localhost:8080/).
               -H 'postman-token: c8348083-be7b-37d7-6a80-aed7dd77c299'
         ```
 
- * API 8:
+ * API 9:
     * end-point: /api/task/{id}
     * Method: GET
     * Accessibility: ADMIN,USER

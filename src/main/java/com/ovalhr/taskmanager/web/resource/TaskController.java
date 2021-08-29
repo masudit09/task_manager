@@ -1,11 +1,10 @@
 package com.ovalhr.taskmanager.web.resource;
 
-import com.ovalhr.taskmanager.entity.Project;
 import com.ovalhr.taskmanager.entity.Task;
 import com.ovalhr.taskmanager.enumeration.TaskStatus;
 import com.ovalhr.taskmanager.mapper.Response;
 import com.ovalhr.taskmanager.repositories.TaskRepository;
-import com.ovalhr.taskmanager.repositories.UserRepository;
+import com.ovalhr.taskmanager.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,9 +27,6 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Page> paginationList(@RequestParam( value = "pageNumber", required = false) Integer pageNumber) {
         if(pageNumber== null) {
@@ -42,64 +38,129 @@ public class TaskController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Task> create(@Valid @RequestBody Task task) {
-        task = taskRepository.save(task);
-        return new ResponseEntity<Task>(task, HttpStatus.OK);
+    public ResponseEntity<Response> create(@Valid @RequestBody Task task) {
+        try {
+            task = taskRepository.save(task);
+            return new ResponseEntity<Response>(new Response(task), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<Response>(new Response("Failed to save Task."), HttpStatus.OK);
+        }
     }
 
     @RequestMapping("/{id}")
-    public ResponseEntity<Optional<Task>> edit(@PathVariable("id") Long id) {
-        return new ResponseEntity<Optional<Task>>(taskRepository.findById(id), HttpStatus.OK);
+    public ResponseEntity<Response> edit(@PathVariable("id") Long id) {
+        try {
+            Optional<Task> task;
+            if(Util.hasRole("ROLE_ADMIN")) {
+                task =  taskRepository.findById(id);
+            } else {
+                task =  taskRepository.findOwnTaskById(id, Util.getCurrentUsername());
+            }
+            if(task.isEmpty()) {
+                return new ResponseEntity<Response>(new Response("Object with given id Not Found or don't have access", null), HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<Response>(new Response(task.get()), HttpStatus.OK);
+            }
+        } catch (Exception ex) {
+            return new ResponseEntity<Response>(new Response("Failed to get Object", null), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Response> update(@Valid @RequestBody Task newTask, @PathVariable Long id) {
-        return taskRepository.findById(id) .map(task -> {
-            newTask.setId(task.getId());
-            return new ResponseEntity<Response>(new Response(taskRepository.save(newTask)), HttpStatus.OK);
-        }).orElseGet(() -> {
-            return new ResponseEntity<Response>(new Response("Task Not found with given id.", null), HttpStatus.OK);
-        });
+        Optional<Task> task;
+        if(Util.hasRole("ROLE_ADMIN")) {
+            task =  taskRepository.findById(id);
+        } else {
+            task =  taskRepository.findOwnTaskById(id, Util.getCurrentUsername());
+        }
+        if(task.isEmpty()) {
+            return new ResponseEntity<Response>(new Response("Task with given id Not Found or don't have access", null), HttpStatus.BAD_REQUEST);
+        } else {
+            Task taskObject = task.get();
+            if(TaskStatus.CLOSED.getText().equals(taskObject.getTaskStatus().getText())) {
+                newTask.setId(taskObject.getId());
+                newTask = taskRepository.save(newTask);
+                return new ResponseEntity<Response>(new Response(newTask), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Response>(new Response("Closed Task can not be edited. ", null), HttpStatus.BAD_REQUEST);
+            }
+
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity<Response> delete(@PathVariable("id") Long id) {
         try {
-            Optional<Task> task =  taskRepository.findById(id);
+            Optional<Task> task;
+            if(Util.hasRole("ROLE_ADMIN")) {
+                task =  taskRepository.findById(id);
+            } else {
+                task =  taskRepository.findOwnTaskById(id, Util.getCurrentUsername());
+            }
             if(task.isEmpty()) {
-                return new ResponseEntity<String>("Object with given id Not Found", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<Response>(new Response("Task with given id Not Found or don't have access", null), HttpStatus.BAD_REQUEST);
             } else {
                 taskRepository.delete(task.get());
             }
-            return new ResponseEntity<String>("Task With given id Deleted Successfully", HttpStatus.OK);
+            return new ResponseEntity<Response>(new Response(task.get()), HttpStatus.OK);
         } catch (Exception ex) {
-            return new ResponseEntity<String>("Failed to delete", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<Response>(new Response("Task with given id Not Found or don't have access", null), HttpStatus.BAD_REQUEST);
         }
     }
 
     @RequestMapping("/find-all")
-    public ResponseEntity<List<Task>> findAll() {
-        List<Task> taskList = (List<Task>) taskRepository.findAll();
-        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
+    public ResponseEntity<Response> findAll() {
+        List<Task> taskList;
+        if(Util.hasRole("ROLE_ADMIN")) {
+            taskList = (List<Task>) taskRepository.findAll();
+        } else {
+            taskList = taskRepository.findAllByUserName(Util.getCurrentUsername());
+        }
+        return new ResponseEntity<Response>(new Response(taskList), HttpStatus.OK);
     }
 
     @RequestMapping("/find-all/by-project/{projectId}")
-    public ResponseEntity<List<Task>> findAll(@PathVariable("projectId") Long projectId) {
-        List<Task> taskList = (List<Task>) taskRepository.findAll();
-        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
+    public ResponseEntity<Response> findAll(@PathVariable("projectId") Long projectId) {
+        List<Task> taskList;
+        if(Util.hasRole("ROLE_ADMIN")) {
+            taskList = taskRepository.findByProjectId(projectId);
+        } else {
+            taskList = taskRepository.findOwnTaskByProjectId(projectId, Util.getCurrentUsername());
+        }
+        return new ResponseEntity<Response>(new Response(taskList), HttpStatus.OK);
+    }
+
+    @RequestMapping("/find-all/by-status/{status}")
+    public ResponseEntity<Response> findAll(@PathVariable("status") String status) {
+       TaskStatus taskStatus = TaskStatus.valueOf(status);
+       System.out.println(" Status object:==="+taskStatus);
+
+        List<Task> taskList;
+        if(Util.hasRole("ROLE_ADMIN")) {
+            taskList = taskRepository.findByStatus(taskStatus);
+        } else {
+            taskList = taskRepository.findOwnTaskByStatus(taskStatus, Util.getCurrentUsername());
+        }
+        return new ResponseEntity<Response>(new Response(taskList), HttpStatus.OK);
     }
 
     @RequestMapping("/find-all/expired")
-    public ResponseEntity<List<Task>> findAllExpired() {
-        List<Task> taskList = (List<Task>) taskRepository.findAll();
-        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
+    public ResponseEntity<Response> findAllExpired() {
+        List<Task> taskList;
+        if(Util.hasRole("ROLE_ADMIN")) {
+            taskList = taskRepository.findExpired();
+        } else {
+            taskList = taskRepository.findOwnExpiredTask(Util.getCurrentUsername());
+        }
+        return new ResponseEntity<Response>(new Response(taskList), HttpStatus.OK);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @RequestMapping("/find-all/by-user/{username}")
-    public ResponseEntity<List<Task>> findAllByUser(@PathVariable("username") String username) {
-        List<Task> taskList = (List<Task>) taskRepository.findAll();
-        return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
+    public ResponseEntity<Response> findAllByUser(@PathVariable("username") String username) {
+        List<Task> taskList = taskRepository.findAllByUserName(username);
+        return new ResponseEntity<Response>(new Response(taskList), HttpStatus.OK);
     }
 
 }

@@ -38,9 +38,14 @@ public class ProjectController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Project> create(@Valid @RequestBody Project project) {
-        project = projectRepository.save(project);
-       return new ResponseEntity<Project>(project, HttpStatus.OK);
+    public ResponseEntity<Response> create(@Valid @RequestBody Project project) {
+        try {
+            project = projectRepository.save(project);
+            return new ResponseEntity<Response>(new Response(project), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<Response>(new Response("Failed to save Project."), HttpStatus.OK);
+        }
+
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
@@ -57,7 +62,7 @@ public class ProjectController {
                 project.setName(newProject.getName());
                 return new ResponseEntity<Response>(new Response(projectRepository.save(project)), HttpStatus.OK);
             }).orElseGet(() -> {
-                return new ResponseEntity<Response>(new Response("Project Not found of don't have access with given id.", null), HttpStatus.OK);
+                return new ResponseEntity<Response>(new Response("Project Not found or don't have access of don't have access with given id.", null), HttpStatus.OK);
             });
         }
     }

@@ -33,10 +33,10 @@ This is a back-end code repository to manage project and task of that project.
 ### SETUP INSTRUCTIONS
 
 Before running this application you should have to confirm following instruction: 
-  * JDK 11 installed.
-  * maven installed.
-  * mysql installed.
-   ##### Then run the following command on terminal:
+* JDK 11 installed.
+* maven installed.
+* mysql installed.
+  ##### Then run the following command on terminal:
    ```
         git clone https://masudrana@bitbucket.org/masudrana/task_manager.git
         cd task_manager

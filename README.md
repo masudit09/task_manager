@@ -21,13 +21,24 @@ This is a back-end code repository to manage project and task of that project.
   * Get all projects by user
 * REST API will validate data and return validation errors if data is invalid
 * DB should be automatically created (if doesn't exist) on application startup
-* Application will start on `8080` port. If already used please change on `server.port=8080` accordingly on `application.properties` file
-* Application will search  `3306` port on localhost for `mysql`. If you used different port for mysql then change accordingly on `application.properties` file
+* Application will start on `8080` port. If already used please change on `server.port=8080` accordingly on `./task_manager/src/main/resources/application.properties` file
+* Application will search  `3306` port on localhost for `mysql`. If you used different port for mysql then change accordingly on `./task_manager/src/main/resources/application.properties` file
+* Change Mysql Database credential `spring.datasource.username=db_username` and `spring.datasource.password=db_password` accordingly on `./task_manager/src/main/resources/application.properties` file
+
+   ```
+        spring.datasource.url=jdbc:mysql://db_url:db_port/task_manager?createDatabaseIfNotExist=true&useUnicode=yes&characterEncoding=UTF-8&useSSL=false&autoReconnect=true
+        spring.datasource.username=db_username
+        spring.datasource.password=db_password
+        .
+        .
+        .
+        server.port=8080
+   ```
 ### TECHNOLOGY USED
  * DB: MySQL
  * Language: Java 11
  * FrameWork/Library: SpringBoot, spring security,
-  Spring data, hibernate, JWT Web Token etc.
+  Spring data, hibernate, JWT Web Token.
  * Build Tool: Maven
  * Server: Inbuilt Tomcat
 ### SETUP INSTRUCTIONS
@@ -47,6 +58,19 @@ Successfully running application will show the message like bellow on terminal:
         o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
         com.ovalhr.taskmanager.Application       : Started Application in 5.286 seconds (JVM running for 5.772)
    ```
+At Runtime User for ADMIN and USER role will be create.
+* ADMIN Role:
+   ``` 
+        username:admin
+        password:admin
+   ```
+
+* USER Role:
+   ``` 
+        username:user
+        password:user
+   ```
+
 Brows [http://localhost:8080/](http://localhost:8080/).
 
 ### API DETAILS
@@ -54,15 +78,9 @@ Brows [http://localhost:8080/](http://localhost:8080/).
 #### USER API:
 
  * API 1:
-    * end-point: /api/user/global/create
-    * Method: GET
-    * Accessibility: ALL 
-    * Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
-
- * API 2:
     * end-point: /api/user/global/sign-in
     * Method: POST
-    * Accessibility: ALL
+    * Accessibility: ADMIN, USER
     * Purpose: To sign in and get access token. you should have to keep the return token for using any end-point 
     * cURL : 
         ```
@@ -75,7 +93,7 @@ Brows [http://localhost:8080/](http://localhost:8080/).
             }'
         ```
  
- * API 3:
+ * API 2:
     * end-point: /api/user/sign-up
     * Method: POST
     * Accessibility: ADMIN

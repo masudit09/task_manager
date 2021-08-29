@@ -52,7 +52,9 @@ public class ProjectController {
     public ResponseEntity<Response> update(@Valid @RequestBody Project newProject, @PathVariable Long id) {
         if(Util.hasRole("ROLE_ADMIN")) {
             return projectRepository.findById(id) .map(project -> {
-                project.setName(newProject.getName());
+                newProject.setId(project.getId());
+                newProject.setCreatedBy(project.getCreatedBy());
+                newProject.setCreatedOn(project.getCreatedOn());
                 return new ResponseEntity<Response>(new Response(projectRepository.save(project)), HttpStatus.OK);
             }).orElseGet(() -> {
                 return new ResponseEntity<Response>(new Response("Project Not found of don't have access with given id.", null), HttpStatus.OK);

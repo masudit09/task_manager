@@ -29,7 +29,7 @@ public class Task extends Audit {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy", timezone = "GMT+6")
     @Column(name = "DUE_Date")
-    private Date dueDate;
+    private Date dueDate = new Date();
 
     @Column(name = "PROJECT_ID")
     @NotNull(message = "Project is required.")

@@ -78,8 +78,10 @@ public class TaskController {
             return new ResponseEntity<Response>(new Response("Task with given id Not Found or don't have access", null), HttpStatus.BAD_REQUEST);
         } else {
             Task taskObject = task.get();
-            if(TaskStatus.CLOSED.getText().equals(taskObject.getTaskStatus().getText())) {
+            if(!TaskStatus.CLOSED.getText().equals(taskObject.getTaskStatus().getText())) {
                 newTask.setId(taskObject.getId());
+                newTask.setCreatedBy(taskObject.getCreatedBy());
+                newTask.setCreatedOn(taskObject.getCreatedOn());
                 newTask = taskRepository.save(newTask);
                 return new ResponseEntity<Response>(new Response(newTask), HttpStatus.OK);
             } else {

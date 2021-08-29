@@ -50,46 +50,46 @@ Successfully running application will show the message like bellow on terminal:
 Brows [http://localhost:8080/](http://localhost:8080/)
 
 ### API DETAILS
-#### USER API:
-#####API 1:
-* End-point: /api/user/global/create
-* Method: GET
-* Accessibility: ALL 
-* Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
+   #### USER API:
+   #####API 1:
+   * End-point: /api/user/global/create
+   * Method: GET
+   * Accessibility: ALL 
+   * Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
 
-#####API 2:
-* end-point: /api/user/global/sign-in
-* Method: POST
-* Accessibility: ALL
-* Purpose: To sign in and get access token. you should have to keep the return token for using any end-point 
-* cURL : 
-   ```
+   #####API 2:
+   * end-point: /api/user/global/sign-in
+   * Method: POST
+   * Accessibility: ALL
+   * Purpose: To sign in and get access token. you should have to keep the return token for using any end-point 
+   * cURL : 
+        ```
         curl -X POST \
           http://localhost:8080/api/global/user/sign-in \
           -H 'content-type: application/json' \
           -d '{
-        	 "username": "admin",
+             "username": "admin",
              "password": "admin"
             }'
-   ```
-* API 3:
-  * end-point: /api/user/sign-up
-  * Method: POST
-  * Accessibility: ADMIN
-  * Purpose: To create new user.
-  * cURL : 
-    ```
-        curl -X POST \
-          http://localhost:8080/api/user/sign-up \
-          -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
-          -H 'content-type: application/json' \
-          -d '{
-        	"username":"user1",
-        	"plainPassword":"user",
-        	"role":"ROLE_USER",
-        	"enabled":true
-        }'
-    ```
+        ```
+   #####API 3:
+   * end-point: /api/user/sign-up
+   * Method: POST
+   * Accessibility: ADMIN
+   * Purpose: To create new user.
+   * cURL : 
+        ```
+            curl -X POST \
+              http://localhost:8080/api/user/sign-up \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'content-type: application/json' \
+              -d '{
+                "username":"user1",
+                "plainPassword":"user",
+                "role":"ROLE_USER",
+                "enabled":true
+            }'
+        ```
            
 ##### PROJECT API:
   

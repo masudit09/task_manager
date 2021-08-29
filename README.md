@@ -50,12 +50,12 @@ Successfully running application will show the message like bellow on terminal:
 Brows [http://localhost:8080/](http://localhost:8080/).
 
 ### API DETAILS
-####USER API:
+ ####USER API:
  * API 1:
-   * End-point: /api/user/global/create
-   * Method: GET
-   * Accessibility: ALL 
-   * Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
+    * End-point: /api/user/global/create
+    * Method: GET
+    * Accessibility: ALL 
+    * Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
 
  * API 2:
     * end-point: /api/user/global/sign-in

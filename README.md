@@ -116,7 +116,7 @@ Brows [http://localhost:8080/](http://localhost:8080/).
         ```
  
  * API 2:
-    * end-point: /api/user/project
+    * end-point: /api/user/project{id}
     * Method: PUT
     * Accessibility: ADMIN,USER
     * Purpose: To Update project.
@@ -134,7 +134,7 @@ Brows [http://localhost:8080/](http://localhost:8080/).
         ```
  
  * API 3:
-    * end-point: /api/user/project
+    * end-point: /api/user/project/{id}
     * Method: DELETE
     * Accessibility: ADMIN,USER
     * Purpose: To Delete Project.
@@ -149,7 +149,7 @@ Brows [http://localhost:8080/](http://localhost:8080/).
         ```
  
  * API 4:
-    * end-point: /api/user/project
+    * end-point: /api/user/project/find-all
     * Method: GET
     * Accessibility: ADMIN,USER
     * Purpose: To get all Project.
@@ -164,9 +164,9 @@ Brows [http://localhost:8080/](http://localhost:8080/).
         ```
  
  * API 5:
-    * end-point: /api/user/project
+    * end-point: /api/user/project/find-all/by-user/{username}
     * Method: GET
-    * Accessibility: ADMIN,USER
+    * Accessibility: ADMIN
     * Purpose: To get all projects by user.
     * cURL : 
         ```
@@ -177,47 +177,153 @@ Brows [http://localhost:8080/](http://localhost:8080/).
               -H 'content-type: application/json' \
               -H 'postman-token: 4b3d2ce4-b2dc-0c5d-325c-95a9cfe84a8c'
         ```
+ 
+ * API 5:
+    * end-point: /api/user/project/{id}
+    * Method: GET
+    * Accessibility: ADMIN, USER
+    * Purpose: To get specific projects by id.
+    * cURL : 
+        ```
+            curl -X GET \
+              http://localhost:8080/api/project/5 \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
+              -H 'content-type: application/json' \
+              -H 'postman-token: 4b3d2ce4-b2dc-0c5d-325c-95a9cfe84a8c'
+        ```
 
 ##### TASK API:
 
 
  * API 1:
-    * end-point: /api/user/global/create
-    * Method: GET
-    * Accessibility: ALL 
-    * Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
-
- * API 2:
-    * end-point: /api/user/global/sign-in
+    * end-point: /api/task
     * Method: POST
-    * Accessibility: ALL
-    * Purpose: To sign in and get access token. you should have to keep the return token for using any end-point 
+    * Accessibility: ADMIN,USER
+    * Purpose: To create new task for a specific project
     * cURL : 
         ```
         curl -X POST \
-          http://localhost:8080/api/global/user/sign-in \
+          http://localhost:8080/api/task/ \
+          -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+          -H 'cache-control: no-cache' \
           -H 'content-type: application/json' \
+          -H 'postman-token: b7654df8-b23f-ea1a-0b0b-e0c5958034c0' \
           -d '{
-             "username": "admin",
-             "password": "admin"
+        	"description":"Test Taks",
+        	"dueDate":"20-10-2021",
+        	"project":1,
+        	"taskStatus":"OPEN"	
+        }'
+        ```
+ 
+ * API 2:
+    * end-point: /api/task/{id}
+    * Method: PUT
+    * Accessibility: ADMIN,USER
+    * Purpose: To update existing task.
+    * cURL : 
+        ```
+            curl -X PUT \
+              http://localhost:8080/api/task/52 \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
+              -H 'content-type: application/json' \
+              -H 'postman-token: 9626dc9b-aa76-3e20-ef02-819903938a06' \
+              -d '{
+            	"description":"Test Taks",
+            	"dueDate":"20-10-2021",
+            	"project":1,
+            	"taskStatus":"CLOSED"	
             }'
         ```
  
  * API 3:
-    * end-point: /api/user/sign-up
-    * Method: POST
-    * Accessibility: ADMIN
-    * Purpose: To create new user.
+    * end-point: /api/task/{id}
+    * Method: DELETE
+    * Accessibility: ADMIN,USER
+    * Purpose: To delete a task.
     * cURL : 
         ```
-            curl -X POST \
-              http://localhost:8080/api/user/sign-up \
+            curl -X DELETE \
+              http://localhost:8080/api/task/52 \
               -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
               -H 'content-type: application/json' \
-              -d '{
-                "username":"user1",
-                "plainPassword":"user",
-                "role":"ROLE_USER",
-                "enabled":true
-            }'
+              -H 'postman-token: 35c101b8-a443-fc7d-eb95-35d2ecfc6523'
+        ```
+ 
+ * API 4:
+    * end-point: /api/task/find-all
+    * Method: GET
+    * Accessibility: ADMIN,USER
+    * Purpose: To get all task.
+    * cURL : 
+        ```
+            curl -X GET \
+              http://localhost:8080/api/task/find-all \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
+              -H 'content-type: application/json' \
+              -H 'postman-token: c36f06f8-983e-2ac3-9661-8c73280af7cd'
+        ```
+ 
+ * API 5:
+    * end-point: /api/task/find-all/by-project/{projectId}
+    * Method: GET
+    * Accessibility: ADMIN,USER
+    * Purpose: To get all task by project.
+    * cURL : 
+        ```
+            curl -X GET \
+              http://localhost:8080/api/task/find-all/by-project/1 \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
+              -H 'content-type: application/json' \
+              -H 'postman-token: 0f94fbfc-23fa-cbb7-6d64-8a33d044cb64'
+        ```
+ 
+ * API 6:
+    * end-point: /api/task/find-all/expired
+    * Method: GET
+    * Accessibility: ADMIN,USER
+    * Purpose: To get all expired task.
+    * cURL : 
+        ```
+            curl -X GET \
+              http://localhost:8080/api/task/find-all/expired \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
+              -H 'content-type: application/json' \
+              -H 'postman-token: 3981a85e-c102-2ed8-0b77-6ee3cb0d5a08'
+        ```
+ 
+ * API 7:
+    * end-point: /api/task/find-all/by-user/{username}
+    * Method: GET
+    * Accessibility: ADMIN
+    * Purpose: To get all task by user.
+    * cURL : 
+        ```
+            curl -X GET \
+              http://localhost:8080/api/task/find-all/by-user/user1 \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
+              -H 'content-type: application/json' \
+              -H 'postman-token: c8348083-be7b-37d7-6a80-aed7dd77c299'
+        ```
+
+ * API 8:
+    * end-point: /api/task/{id}
+    * Method: GET
+    * Accessibility: ADMIN,USER
+    * Purpose: To get specific task by id.
+    * cURL : 
+        ```
+            curl -X GET \
+              http://localhost:8080/api/task/55 \
+              -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+              -H 'cache-control: no-cache' \
+              -H 'content-type: application/json' \
+              -H 'postman-token: e1cc1c66-786e-364f-2030-88ec0ec0db39'
         ```

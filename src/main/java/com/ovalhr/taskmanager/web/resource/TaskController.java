@@ -62,13 +62,28 @@ public class TaskController {
         });
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+        try {
+            Optional<Task> task =  taskRepository.findById(id);
+            if(task.isEmpty()) {
+                return new ResponseEntity<String>("Object with given id Not Found", HttpStatus.BAD_REQUEST);
+            } else {
+                taskRepository.delete(task.get());
+            }
+            return new ResponseEntity<String>("Task With given id Deleted Successfully", HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<String>("Failed to delete", HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @RequestMapping("/find-all")
     public ResponseEntity<List<Task>> findAll() {
         List<Task> taskList = (List<Task>) taskRepository.findAll();
         return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);
     }
 
-    @RequestMapping("/find-all/project/{projectId}")
+    @RequestMapping("/find-all/by-project/{projectId}")
     public ResponseEntity<List<Task>> findAll(@PathVariable("projectId") Long projectId) {
         List<Task> taskList = (List<Task>) taskRepository.findAll();
         return new ResponseEntity<List<Task>>(taskList, HttpStatus.OK);

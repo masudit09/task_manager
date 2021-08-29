@@ -61,6 +61,7 @@ Successfully running application will show the message like bellow on terminal:
         com.ovalhr.taskmanager.Application       : Started Application in 5.286 seconds (JVM running for 5.772)
    ```
 At Runtime User for ADMIN and USER role will be create.
+
 * ADMIN Role:
    ``` 
         username:admin

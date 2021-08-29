@@ -1,45 +1,94 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# Task Management REST API
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+This is a back-end code repository to manage project and task of that project.
+ ##### Features included:
+* REST API for task managing using JSON format for interchange
+* Secure endpoints with Spring Security. There should be two roles: USER and ADMIN.
+* USER can only access own tasks and projects
+* Authentication credentials has been stored in DB
+  ##### USER and ADMIN should be able to:
+  * Create project
+  * Get all projects
+  * Delete project
+  * Create task
+  * Edit task (change description, status, due date). Closed tasks cannot be edited.
+  * Search tasks
+    * Get all by project
+    * Get expired tasks (due date in the past)
+    * By status
+  ##### ADMIN additionally should be able to:
+  * Get all tasks by user
+  * Get all projects by user
+* REST API will validate data and return validation errors if data is invalid
+* DB should be automatically created (if doesn't exist) on application startup
+* Application will start on `8080` port. If already used please change on `server.port=8080` accordingly on `application.properties` file
+* Application will search  `3306` port on localhost for `mysql`. If you used different port for mysql then change accordingly on `application.properties` file
+### TECHNOLOGY USED
+ * DB: MySQL
+ * Language: Java 11
+ * FrameWork/Library: SpringBoot, spring security,
+  Spring data, hibernate, JWT Web Token etc  
+ * Build Tool: Maven
+ * Server: Inbuilt Tomcat
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
 
----
+### SETUP INSTRUCTIONS
+Before running this application you should have to confirm following instruction: 
+ * JDK 11 installed
+ * maven installed
+ * mysql installed
+ ##### Then run the following command on termina:
+    
+    git clone https://masudrana@bitbucket.org/masudrana/task_manager.git
+    cd task_manager
+    mvn spring-boot:run
+    
+Successfully running application will show the message like bellow on terminal:
+    
+    o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+    com.ovalhr.taskmanager.Application       : Started Application in 5.286 seconds (JVM running for 5.772)
 
-## Edit a file
+Brows [http://localhost:8080/](http://localhost:8080/)
 
-Youâ€™ll start by editing this README file to learn how to edit a file in Bitbucket.
-
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and youâ€™ll see the change you just made.
-6. Go back to the **Source** page.
-
----
-
-## Create a file
-
-Next, youâ€™ll add a new file to this repository.
-
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
-
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
-
----
-
-## Clone a repository
-
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
-
-1. Youâ€™ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if youâ€™d like to and then click **Clone**.
-4. Open the directory you just created to see your repositoryâ€™s files.
-
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+### API DETAILS
+  ##### USER API:
+   1. end-point: /api/user/global/create
+   * Method: GET
+   * Accessibility: ALL 
+   * Purpose: To create first `admin` user whose password also `admin` and role `ADMIN`
+   
+   2. end-point: /api/user/global/sign-in
+   * Method: POST
+   * Accessibility: ALL
+   * Purpose: To sign in and get access token. you should have to keep the return token for using any end-point 
+   * cURL : 
+        ```
+        curl -X POST \
+          http://localhost:8080/api/global/user/sign-in \
+          -H 'content-type: application/json' \
+          -d '{
+        	 "username": "admin",
+             "password": "admin"
+            }'
+        ```    
+   2. end-point: /api/user/sign-up
+   * Method: POST
+   * Accessibility: ADMIN
+   * Purpose: To create new user.
+   * cURL : 
+        ```
+        curl -X POST \
+          http://localhost:8080/api/user/sign-up \
+          -H 'authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYzMDA5MDA4MCwiZXhwIjoxNjMyNjgyMDgwfQ.WHS0C1BaxxTt_GHAIoweCV5vn9MzRA0X1qw5JbFXI2Ny6GFZ-vm1SFUfzvMAZ8PPOD29a2VzYwR37_Icmu-6rg' \
+          -H 'content-type: application/json' \
+          -d '{
+        	"username":"user1",
+        	"plainPassword":"user",
+        	"role":"ROLE_USER",
+        	"enabled":true
+        }'
+       ```  
+           
+  ##### PROJECT API:
+  
+  ##### TASK API:

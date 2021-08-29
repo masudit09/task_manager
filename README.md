@@ -1,11 +1,11 @@
 # Task Management REST API
 
 This is a back-end code repository to manage project and task of that project.
- ##### Features included:
-* REST API for task managing using JSON format for interchange
-* Secure endpoints with Spring Security. There should be two roles: USER and ADMIN.
-* USER can only access own tasks and projects
-* Authentication credentials has been stored in DB
+##### Features included:
+ *  REST API for task managing using JSON format for interchange
+ *  Secure endpoints with Spring Security. There should be two roles: USER and ADMIN.
+ *  USER can only access own tasks and projects
+ *  Authentication credentials has been stored in DB
   ##### USER and ADMIN should be able to:
   * Create project
   * Get all projects

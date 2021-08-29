@@ -1,6 +1,7 @@
 package com.ovalhr.taskmanager.web.resource;
 
 import com.ovalhr.taskmanager.entity.Project;
+import com.ovalhr.taskmanager.mapper.Response;
 import com.ovalhr.taskmanager.repositories.ProjectRepository;
 import com.ovalhr.taskmanager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,16 @@ public class ProjectController {
     public ResponseEntity<Project> create(@Valid @RequestBody Project project) {
         project = projectRepository.save(project);
        return new ResponseEntity<Project>(project, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Response> update(@Valid @RequestBody Project newProject, @PathVariable Long id) {
+        return projectRepository.findById(id) .map(project -> {
+                    project.setName(newProject.getName());
+            return new ResponseEntity<Response>(new Response(projectRepository.save(project)), HttpStatus.OK);
+        }).orElseGet(() -> {
+            return new ResponseEntity<Response>(new Response("Project Not found with given id.", null), HttpStatus.OK);
+        });
     }
 
     @RequestMapping("/{id}")

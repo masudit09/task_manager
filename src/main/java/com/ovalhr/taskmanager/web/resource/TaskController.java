@@ -3,6 +3,7 @@ package com.ovalhr.taskmanager.web.resource;
 import com.ovalhr.taskmanager.entity.Project;
 import com.ovalhr.taskmanager.entity.Task;
 import com.ovalhr.taskmanager.enumeration.TaskStatus;
+import com.ovalhr.taskmanager.mapper.Response;
 import com.ovalhr.taskmanager.repositories.TaskRepository;
 import com.ovalhr.taskmanager.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,16 @@ public class TaskController {
     @RequestMapping("/{id}")
     public ResponseEntity<Optional<Task>> edit(@PathVariable("id") Long id) {
         return new ResponseEntity<Optional<Task>>(taskRepository.findById(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<Response> update(@Valid @RequestBody Task newTask, @PathVariable Long id) {
+        return taskRepository.findById(id) .map(task -> {
+            newTask.setId(task.getId());
+            return new ResponseEntity<Response>(new Response(taskRepository.save(newTask)), HttpStatus.OK);
+        }).orElseGet(() -> {
+            return new ResponseEntity<Response>(new Response("Task Not found with given id.", null), HttpStatus.OK);
+        });
     }
 
     @RequestMapping("/find-all")
